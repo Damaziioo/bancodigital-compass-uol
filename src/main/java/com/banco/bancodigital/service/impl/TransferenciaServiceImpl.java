@@ -9,6 +9,7 @@ import com.banco.bancodigital.exception.SaldoInsuficienteException;
 import com.banco.bancodigital.exception.TransferenciaMesmaContaException;
 import com.banco.bancodigital.repository.ContaRepository;
 import com.banco.bancodigital.repository.TransferenciaRepository;
+import com.banco.bancodigital.service.NotificacaoService;
 import com.banco.bancodigital.service.TransferenciaService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class TransferenciaServiceImpl implements TransferenciaService {
 
     private final TransferenciaRepository transferenciaRepository;
     private final ContaRepository contaRepository;
+    private final NotificacaoService notificacaoService;
 
     @Override
     @Transactional
@@ -51,7 +53,11 @@ public class TransferenciaServiceImpl implements TransferenciaService {
                 .valor(request.valor())
                 .build();
 
-        return TransferenciaResponse.from(transferenciaRepository.saveAndFlush(transferencia));
+        Transferencia transferenciaSalva =  transferenciaRepository.saveAndFlush(transferencia);
+
+        notificacaoService.notificar(transferenciaSalva);
+
+        return TransferenciaResponse.from(transferenciaSalva);
     }
 
     @Override
