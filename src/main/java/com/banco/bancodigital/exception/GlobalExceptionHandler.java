@@ -42,4 +42,26 @@ public class GlobalExceptionHandler {
                 new ErroResponse(400, ex.getMessage(), LocalDateTime.now())
         );
     }
+
+    @ExceptionHandler(TransferenciaMesmaContaException.class)
+    public ResponseEntity<ErroResponse> handleIllegalArgument(TransferenciaMesmaContaException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErroResponse(
+                        HttpStatus.BAD_REQUEST.value(),
+                        ex.getMessage(),
+                        LocalDateTime.now()
+                )
+        );
+    }
+
+    @ExceptionHandler(SaldoInsuficienteException.class)
+    public ResponseEntity<ErroResponse> handleIllegalArgument(SaldoInsuficienteException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErroResponse(
+                        HttpStatus.BAD_REQUEST.value(),
+                        ex.getMessage(),
+                        LocalDateTime.now()
+                )
+        );
+    }
 }
